@@ -23,6 +23,14 @@ namespace Nav_WhiteRabbit
         //Initialisation au démarrage du navigateur
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            panel2.Visible = false;
+
+           
+               
+           
+
+
             //Creation du navigateur, suppression des erreurs de scripts, style centrer, visible, adresse google
             browser = new WebBrowser();
             browser.ScriptErrorsSuppressed = true;
@@ -195,6 +203,23 @@ namespace Nav_WhiteRabbit
                 tabControl1.TabPages.RemoveAt(tabControl1.SelectedIndex);
                 tabControl1.SelectTab(tabControl1.TabPages.Count - 1);
                 i -= 1;
+            }
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Y < 2 & (panel2.Visible == false))
+            {
+                panel2.Visible = true;
+                label2.Text = "menu apparition";
+                tabControl1.Dock = DockStyle.None;
+            }
+
+            if (e.Y > 50 & (panel2.Visible == true))
+            {
+                panel2.Visible = false;
+                label2.Text = "menu disparition";
+                tabControl1.Dock = DockStyle.Fill;
             }
         }
 
