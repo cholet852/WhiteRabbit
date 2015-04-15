@@ -14,9 +14,6 @@ namespace Nav_WhiteRabbit
         public Form1()
         {
             InitializeComponent();
-
-            panel2.Dock = DockStyle.None;
-            panel2.Visible = false;
         }
 
         WebBrowser browser = new WebBrowser();
@@ -26,8 +23,15 @@ namespace Nav_WhiteRabbit
         //Initialisation au démarrage du navigateur
         private void Form1_Load(object sender, EventArgs e)
         {
+            //Initialisation du menu gauche
+            panel2.Dock = DockStyle.Left;
+            panel2.Visible = true;
+            panel2.Width = 10;
 
-
+            //Initialisation du menu bas
+            panel3.Dock = DockStyle.Bottom;
+            panel3.Visible = true;
+            panel3.Height = 10;
             
 
             //Creation du navigateur, suppression des erreurs de scripts, style centrer, visible, adresse google
@@ -57,6 +61,7 @@ namespace Nav_WhiteRabbit
            // buttonBack.Enabled = false;
            // buttonForward.Enabled = false;
            // buttonStop.Enabled = false;
+
 
         }
 
@@ -184,6 +189,7 @@ namespace Nav_WhiteRabbit
             }
         }
 
+        //Ajouter un onglet
         private void button1_Click(object sender, EventArgs e)
         {
             browser = new WebBrowser();
@@ -199,6 +205,7 @@ namespace Nav_WhiteRabbit
             i += 1;
         }
 
+        //Supprimmer un onglet
         private void button2_Click(object sender, EventArgs e)
         {
             if (tabControl1.TabPages.Count - 1 > 0)
@@ -209,34 +216,41 @@ namespace Nav_WhiteRabbit
             }
         }
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.X < 1 & (panel2.Visible == false))
-            {
-               
-                //tabControl1.Dock = DockStyle.None;
-                panel2.Visible = true;
-                panel2.Dock = DockStyle.Left;
-                label2.Text = "menu apparition";
-                //tabControl1.Dock = DockStyle.Fill;
-            }
+        
 
-            if (e.X > 40 & (panel2.Visible == true))
-            {
-                panel2.Dock = DockStyle.None;
-                panel2.Visible = false;
-                label2.Text = "menu disparition";
-                //tabControl1.Dock = DockStyle.Fill;
-            }
-        }
-
+        //Gestion apparition menu gauche
         private void panel2_MouseLeave(object sender, EventArgs e)
         {
-            panel2.Dock = DockStyle.None;
-            panel2.Visible = false;
-            label2.Text = "menu disparition";
+            panel2.Width = 10;
         }
 
+        private void panel2_MouseHover(object sender, EventArgs e)
+        {
+            panel2.Width = 50;
+        }
+
+        //Gestion apparition menu bas
+        private void panel3_MouseHover(object sender, EventArgs e)
+        {
+            panel3.Height = 50;
+
+        }
+
+        private void panel3_MouseLeave(object sender, EventArgs e)
+        {
+             panel3.Height = 10;
+
+            
+        }
+
+        private void buttonHome_MouseHover(object sender, EventArgs e)
+        {
+            panel2.Height = 50;
+        }
+
+        
+
        
+
     }
 }

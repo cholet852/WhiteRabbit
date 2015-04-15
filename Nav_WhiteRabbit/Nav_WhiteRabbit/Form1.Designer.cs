@@ -61,6 +61,7 @@
             this.panel2.Size = new System.Drawing.Size(49, 344);
             this.panel2.TabIndex = 1;
             this.panel2.MouseLeave += new System.EventHandler(this.panel2_MouseLeave);
+            this.panel2.MouseHover += new System.EventHandler(this.panel2_MouseHover);
             // 
             // buttonHome
             // 
@@ -74,6 +75,7 @@
             this.buttonHome.TabIndex = 6;
             this.buttonHome.UseVisualStyleBackColor = true;
             this.buttonHome.Click += new System.EventHandler(this.buttonHome_Click);
+            this.buttonHome.MouseHover += new System.EventHandler(this.buttonHome_MouseHover);
             // 
             // buttonStop
             // 
@@ -191,6 +193,8 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(658, 42);
             this.panel3.TabIndex = 3;
+            this.panel3.MouseLeave += new System.EventHandler(this.panel3_MouseLeave);
+            this.panel3.MouseHover += new System.EventHandler(this.panel3_MouseHover);
             // 
             // label2
             // 
@@ -245,7 +249,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
             this.panel2.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
