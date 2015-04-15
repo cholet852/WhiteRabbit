@@ -14,6 +14,9 @@ namespace Nav_WhiteRabbit
         public Form1()
         {
             InitializeComponent();
+
+            panel2.Dock = DockStyle.None;
+            panel2.Visible = false;
         }
 
         WebBrowser browser = new WebBrowser();
@@ -24,12 +27,8 @@ namespace Nav_WhiteRabbit
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            panel2.Visible = false;
 
-           
-               
-           
-
+            
 
             //Creation du navigateur, suppression des erreurs de scripts, style centrer, visible, adresse google
             browser = new WebBrowser();
@@ -39,12 +38,16 @@ namespace Nav_WhiteRabbit
             browser.DocumentCompleted += browser_DocumentCompleted;
             browser.Navigate("http://www.google.fr");
 
+            
             //Gestion des onglets, ancrage au 4 coins, onglet vide nommé "New Tab", incremente nombre onglet avec i
-            tabControl1.Anchor = AnchorStyles.Top & AnchorStyles.Bottom & AnchorStyles.Right & AnchorStyles.Left;
             tabControl1.TabPages.Add("New Tab");
             tabControl1.SelectTab(i);
             tabControl1.SelectedTab.Controls.Add(browser);
+            //tabControl1.Anchor = AnchorStyles.Top & AnchorStyles.Bottom & AnchorStyles.Right & AnchorStyles.Left;
+            tabControl1.Dock = DockStyle.Fill;
             i += 1;
+            
+
 
             //Affiche Google par defaut dans la barre d'adresse et valide
             textBoxAddress.Text = "http://www.google.fr";
@@ -208,21 +211,32 @@ namespace Nav_WhiteRabbit
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Y < 2 & (panel2.Visible == false))
+            if (e.X < 1 & (panel2.Visible == false))
             {
+               
+                //tabControl1.Dock = DockStyle.None;
                 panel2.Visible = true;
+                panel2.Dock = DockStyle.Left;
                 label2.Text = "menu apparition";
-                tabControl1.Dock = DockStyle.None;
+                //tabControl1.Dock = DockStyle.Fill;
             }
 
-            if (e.Y > 50 & (panel2.Visible == true))
+            if (e.X > 40 & (panel2.Visible == true))
             {
+                panel2.Dock = DockStyle.None;
                 panel2.Visible = false;
                 label2.Text = "menu disparition";
-                tabControl1.Dock = DockStyle.Fill;
+                //tabControl1.Dock = DockStyle.Fill;
             }
         }
 
+        private void panel2_MouseLeave(object sender, EventArgs e)
+        {
+            panel2.Dock = DockStyle.None;
+            panel2.Visible = false;
+            label2.Text = "menu disparition";
+        }
 
+       
     }
 }
