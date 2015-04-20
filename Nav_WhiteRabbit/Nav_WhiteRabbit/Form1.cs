@@ -6,10 +6,11 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MetroFramework.Forms;
 
 namespace Nav_WhiteRabbit
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MetroForm
     {
         public Form1()
         {
@@ -19,40 +20,31 @@ namespace Nav_WhiteRabbit
         WebBrowser browser = new WebBrowser();
         int i = 0;
 
-
+        #region LOAD
         //Initialisation au démarrage du navigateur
         private void Form1_Load(object sender, EventArgs e)
         {
             //Initialisation du menu gauche
-            panel2.Dock = DockStyle.Left;
-            panel2.Visible = true;
-            panel2.Width = 10;
+            metroPanel1.Width = 10;
+            metroPanel1.BackColor = Color.Black;
 
             //Initialisation du menu bas
-            panel3.Dock = DockStyle.Bottom;
-            panel3.Visible = true;
-            panel3.Height = 10;
+            metroPanel2.Height = 10;
+            metroPanel2.BackColor = Color.Black;
             
 
             //Creation du navigateur, suppression des erreurs de scripts, style centrer, visible, adresse google
-            browser = new WebBrowser();
-            browser.ScriptErrorsSuppressed = true;
-            browser.Dock = DockStyle.Fill;
-            browser.Visible = true;
             browser.DocumentCompleted += browser_DocumentCompleted;
-            browser.Navigate("http://www.google.fr");
-
-            
+           
             //Gestion des onglets, ancrage au 4 coins, onglet vide nommé "New Tab", incremente nombre onglet avec i
-            tabControl1.TabPages.Add("New Tab");
-            tabControl1.SelectTab(i);
-            tabControl1.SelectedTab.Controls.Add(browser);
-            //tabControl1.Anchor = AnchorStyles.Top & AnchorStyles.Bottom & AnchorStyles.Right & AnchorStyles.Left;
-            tabControl1.Dock = DockStyle.Fill;
+            metroTabControl1.TabPages.Add("New Tab");
+            metroTabControl1.SelectTab(i);
+            metroTabControl1.SelectedTab.Controls.Add(browser);
+            metroTabControl1.Dock = DockStyle.Fill;
             i += 1;
+
+            addNewTab();
             
-
-
             //Affiche Google par defaut dans la barre d'adresse et valide
             textBoxAddress.Text = "http://www.google.fr";
             buttonGo_Click(null,null);
@@ -64,20 +56,40 @@ namespace Nav_WhiteRabbit
 
 
         }
+#endregion
 
+        #region ONGLETS
+
+        private void addNewTab()
+        {
+            //Creation d'un nouvel objet TabPage
+            TabPage tpage = new TabPage();
+            
+            //Ajoute l'onglet nouvellement créer à la collection de controle d'onglet
+            metroTabControl1.TabPages.Insert(metroTabControl1.TabCount - 1, tpage);
+
+            //Creation d'un objet navigateur
+            browser = new WebBrowser();
+            browser.Navigate("http://www.google.fr");
+
+            //Ajoute le navigateur a l'onglet précedement créer
+            tpage.Controls.Add(browser);
+            browser.Dock = DockStyle.Fill;
+            browser.ScriptErrorsSuppressed = true;
+            browser.Visible = true;
+            metroTabControl1.SelectTab(tpage);
+
+            //Ajoute quelque gestion d'evenement pour l'objet navigateur
+            
+        }
 
         //Quand le chargement est fini
         void browser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            tabControl1.SelectedTab.Text = ((WebBrowser)tabControl1.SelectedTab.Controls[0]).DocumentTitle;
-
-            textBoxAddress.Text = browser.Url.AbsoluteUri;
-
-            label1.Text = browser.StatusText;
-            buttonStop.Enabled = false;
-            textBoxAddress.Text = browser.Url.ToString();
-            label1.Text = "Loaded";
-            progressBar1.Value = 0;
+           metroTabControl1.SelectedTab.Text = ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).DocumentTitle;textBoxAddress.Text = browser.Url.AbsoluteUri;
+           buttonStop.Enabled = false;
+           textBoxAddress.Text = browser.Url.ToString();
+           progressBar1.Value = 0;
         }
 
 
@@ -102,7 +114,6 @@ namespace Nav_WhiteRabbit
 
             buttonStop.Enabled = true; //On active le bouton stop
 
-            label1.Text = browser.StatusText; //On met le status à jour
 
             //Si il ya une page suivante alors on active le bouton suivant
             if (browser.CanGoForward)
@@ -124,7 +135,6 @@ namespace Nav_WhiteRabbit
                 buttonBack.Enabled = false;
             }
 
-            label1.Text = "Loading...";
             while (true)
             {
                 if (progressBar1.Value >= 100)
@@ -133,34 +143,36 @@ namespace Nav_WhiteRabbit
             }
         }
 
+        #endregion
 
-//Boutons de Navigation
+        #region NAVIGATION
+        //Boutons de Navigation
 
         //Bouton de recherche
         private void buttonGo_Click(object sender, EventArgs e)
         {
-            ((WebBrowser)tabControl1.SelectedTab.Controls[0]).Navigate(textBoxAddress.Text);
+           // ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).Navigate(textBoxAddress.Text);
         }
 
 
         //Bouton precedent
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            ((WebBrowser)tabControl1.SelectedTab.Controls[0]).GoBack();
+            ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).GoBack();
         }
 
 
         //Bouton suivant
         private void buttonForward_Click(object sender, EventArgs e)
         {
-            ((WebBrowser)tabControl1.SelectedTab.Controls[0]).GoForward();
+            ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).GoForward();
         }
 
 
         //Bouton actualiser
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
-            ((WebBrowser)tabControl1.SelectedTab.Controls[0]).Refresh();
+            ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).Refresh();
         }
 
 
@@ -169,7 +181,6 @@ namespace Nav_WhiteRabbit
         {
             buttonStop.Enabled = false;
             browser.Stop();
-            label1.Text = "Stopped";
             progressBar1.Value = 0;
         }
 
@@ -177,7 +188,7 @@ namespace Nav_WhiteRabbit
         //Bouton home
         private void buttonHome_Click(object sender, EventArgs e)
         {
-            ((WebBrowser)tabControl1.SelectedTab.Controls[0]).Navigate("http://www.google.com");
+            ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).Navigate("http://www.google.com");
         }
 
         private void textBoxAddress_KeyDown(object sender, KeyEventArgs e)
@@ -185,7 +196,7 @@ namespace Nav_WhiteRabbit
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                ((WebBrowser)tabControl1.SelectedTab.Controls[0]).Navigate(textBoxAddress.Text);
+                ((WebBrowser)metroTabControl1.SelectedTab.Controls[0]).Navigate(textBoxAddress.Text);
             }
         }
 
@@ -198,59 +209,89 @@ namespace Nav_WhiteRabbit
             browser.Visible = true;
             browser.DocumentCompleted += browser_DocumentCompleted;
             browser.Navigate("http://www.google.fr");
-            tabControl1.Anchor = AnchorStyles.Top & AnchorStyles.Bottom & AnchorStyles.Right & AnchorStyles.Left;
-            tabControl1.TabPages.Add("New Tab");
-            tabControl1.SelectTab(i);
-            tabControl1.SelectedTab.Controls.Add(browser);
+            metroTabControl1.Anchor = AnchorStyles.Top & AnchorStyles.Bottom & AnchorStyles.Right & AnchorStyles.Left;
+            metroTabControl1.TabPages.Add("New Tab");
+            metroTabControl1.SelectTab(i);
+            metroTabControl1.SelectedTab.Controls.Add(browser);
             i += 1;
         }
 
         //Supprimmer un onglet
         private void button2_Click(object sender, EventArgs e)
         {
-            if (tabControl1.TabPages.Count - 1 > 0)
+            if (metroTabControl1.TabPages.Count - 1 > 0)
             {
-                tabControl1.TabPages.RemoveAt(tabControl1.SelectedIndex);
-                tabControl1.SelectTab(tabControl1.TabPages.Count - 1);
+                metroTabControl1.TabPages.RemoveAt(metroTabControl1.SelectedIndex);
+                metroTabControl1.SelectTab(metroTabControl1.TabPages.Count - 1);
                 i -= 1;
             }
         }
 
-        
-
-        //Gestion apparition menu gauche
-        private void panel2_MouseLeave(object sender, EventArgs e)
-        {
-            panel2.Width = 10;
-        }
-
-        private void panel2_MouseHover(object sender, EventArgs e)
-        {
-            panel2.Width = 50;
-        }
-
-        //Gestion apparition menu bas
-        private void panel3_MouseHover(object sender, EventArgs e)
-        {
-            panel3.Height = 50;
-
-        }
-
-        private void panel3_MouseLeave(object sender, EventArgs e)
-        {
-             panel3.Height = 10;
-
-            
-        }
-
-        private void buttonHome_MouseHover(object sender, EventArgs e)
-        {
-            panel2.Height = 50;
-        }
-
-        
+        #endregion
 
        
+
+
+        #region MENU 
+        //Gestion apparition menu gauche
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (this.metroPanel1.Size.Width >= 80) this.timer1.Enabled = false;
+            else this.metroPanel1.Width += 15;
+        }
+
+        private void timer2_Tick_1(object sender, EventArgs e)
+        {
+            if (this.metroPanel1.Size.Width <= 10) this.timer2.Enabled = false;
+            else this.metroPanel1.Width -= 15;
+        }
+
+
+        private void metroPanel1_MouseHover(object sender, EventArgs e)
+        {
+            this.timer2.Enabled = false;
+            this.timer1.Enabled = true;
+        }
+
+        private void metroPanel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if(e.X >= 80)
+            {
+                this.timer1.Enabled = false;
+                this.timer2.Enabled = true;
+            }
+        }
+
+
+        //Gestion apparition menu bas
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            if (this.metroPanel2.Size.Height >= 50) this.timer3.Enabled = false;
+            else this.metroPanel2.Height += 15;
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            if (this.metroPanel2.Size.Height <= 10) this.timer4.Enabled = false;
+            else this.metroPanel2.Height -= 15;
+        }
+
+        private void metroPanel2_MouseHover(object sender, EventArgs e)
+        {
+            this.timer4.Enabled = false;
+            this.timer3.Enabled = true;
+        }
+
+        private void metroPanel2_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Y >= 60)
+            {
+                this.timer3.Enabled = false;
+                this.timer4.Enabled = true;
+            }
+        }
+
+        #endregion
 
     }
 }
